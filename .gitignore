@@ -1,0 +1,11 @@
+save_data/
+save_data/*
+__pycache__/
+*.egg-info*
+.idea/
+*.bck
+.DS_Store
+settings.json
+data/
+outputs/
+plots/
