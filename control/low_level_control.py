@@ -4,53 +4,41 @@ import controllers.cpg_controller.gaits as cpg_robot # from daisy-simulation
 import controllers.cpg_controller.cpg_oscillator as cpg
 
 class low_level_controller:
-    def __init__(self, a_dim , num_legs, action_limits=None, action_scale=None):
+    def __init__(self, a_dim , num_legs, action_mid_point=None, action_scale=None):
         self.a_dim = a_dim
         self.num_legs = num_legs
         self.num_joints_per_leg = int(a_dim/num_legs)
 
-        self.action_limit = np.zeros((self.a_dim , 2))
-        if action_limits is None:
-            self.action_limit[:, 0] = np.zeros(self.a_dim ) + np.pi / 2.0
-            self.action_limit[:, 1] = np.zeros(self.a_dim ) - np.pi / 2.0
+        if action_mid_point is None:
+            self.action_mid_point = np.zeros(self.a_dim)
         else:
-            self.action_limit[:, 0] = np.array([action_limits] * self.num_legs).reshape(self.a_dim)
-            self.action_limit[:, 1] = -np.array([action_limits] * self.num_legs).reshape(self.a_dim)
-        
+            self.action_mid_point = np.array([action_mid_point]*self.num_legs).reshape(self.a_dim)
+            
         if action_scale is None:
             self.action_scale = np.ones(self.a_dim)
         else:
             self.action_scale = np.array([action_scale]*self.num_legs).reshape(self.a_dim)
 
-    def get_action(self, state):
-        action = self._get_action(state)
-        action = np.multiply(action, self.action_scale)
-        action = np.clip(action, a_min=self.action_limit[:,1], a_max=self.action_limit[:,0])
+    def get_action(self, ):
+        action = self._get_action()
+        action = np.multiply((action - 0.5) * 2, self.action_scale)
+        action = action + self.action_mid_point
         return action
 
 
-    def _get_action(self, state):
+    def _get_action(self,):
         raise NotImplementedError("Subclass must implement")
-
-
-    def set_init_state(self, init_state, action_limits=None):
-        self.init_state = init_state
-        if action_limits is not None:
-            j_pos = np.array(self.init_state['j_pos'])
-            self.action_limit[:, 0] = j_pos + np.array([action_limits] * self.num_legs).reshape(self.a_dim)
-            self.action_limit[:, 1] = j_pos - np.array([action_limits] * self.num_legs).reshape(self.a_dim)
 
         
 
 class cpg_low_level_controller(low_level_controller):
-    def __init__(self, a_dim, num_legs, parameter_dim=48, action_limits=None, action_scale=None):
-        super().__init__(a_dim=a_dim, num_legs=num_legs, action_limits=action_limits, action_scale=action_scale)
+    def __init__(self, a_dim, num_legs, parameter_dim=48, action_mid_point=None, action_scale=None):
+        super().__init__(a_dim=a_dim, num_legs=num_legs, action_mid_point=action_mid_point, action_scale=action_scale)
 
         self.parameter_dim = parameter_dim
         self.parameter_array = np.clip(0.5*np.random.randn(parameter_dim),0, 1)        
         self.robot = cpg_robot.Robot(n_legs=num_legs, n_joint_per_leg=self.num_joints_per_leg)
         self.update_policy_parmeters(self.parameter_array)
-
 
     def gen_cpg_policy(self, ):
         gait = cpg_robot.Gait(robot=self.robot, 
@@ -64,7 +52,7 @@ class cpg_low_level_controller(low_level_controller):
         self.policy = cpg.CpgController(gait)
         self.action_step = 0
 
-    def _get_action(self, parameter_list):
+    def _get_action(self, ):
         action = np.zeros(self.a_dim)
         self.policy.update()
         motor_idx = 0
