@@ -3,4 +3,4 @@ reward:
   class: reward_function.rewards.velocity_tracking_reward
   params:
     target: [0.2, 0.0, 0.3]
-    reward_factor: [2.0, 1.0]
+    reward_factor: [0.2, 0.1]

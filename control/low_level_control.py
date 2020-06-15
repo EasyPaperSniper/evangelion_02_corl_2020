@@ -21,7 +21,7 @@ class low_level_controller:
 
     def get_action(self, ):
         action = self._get_action()
-        action = np.multiply((action - 0.5) * 2, self.action_scale)
+        action = np.multiply((action - 0.5) , self.action_scale)
         action = action + self.action_mid_point
         return action
 
@@ -32,10 +32,11 @@ class low_level_controller:
         
 
 class cpg_low_level_controller(low_level_controller):
-    def __init__(self, a_dim, num_legs, parameter_dim=48, action_mid_point=None, action_scale=None):
+    def __init__(self, a_dim, num_legs, parameter_dim=48, max_frequency = 2, action_mid_point=None, action_scale=None):
         super().__init__(a_dim=a_dim, num_legs=num_legs, action_mid_point=action_mid_point, action_scale=action_scale)
 
         self.parameter_dim = parameter_dim
+        self.max_frequency =  max_frequency
         self.parameter_array = np.clip(0.5*np.random.randn(parameter_dim),0, 1)        
         self.robot = cpg_robot.Robot(n_legs=num_legs, n_joint_per_leg=self.num_joints_per_leg)
         self.update_policy_parmeters(self.parameter_array)
@@ -58,7 +59,7 @@ class cpg_low_level_controller(low_level_controller):
         motor_idx = 0
         for j in range(self.num_legs):
             for k in range(self.num_joints_per_leg):
-                action[motor_idx+k]= self.policy.y_data[k*self.policy.n_legs+j][self.action_step]
+                action[motor_idx+k]= -self.policy.y_data[k*self.policy.n_legs+j][self.action_step]
             motor_idx += 3
 
         self.action_step += 1
@@ -82,7 +83,7 @@ class cpg_low_level_controller(low_level_controller):
             for j in range(self.num_legs):
                 self.relative_phases[i][j] = phases[j] - phases[i]
 
-        self.frequency = self.parameter_array[3] * np.ones((self.num_joints_per_leg, self.num_legs))
+        self.frequency = self.max_frequency*self.parameter_array[3] * np.ones((self.num_joints_per_leg, self.num_legs))
         self.amplitude = np.reshape(self.parameter_array[4:16],(self.num_joints_per_leg, self.num_legs))
         self.amp_offset = np.reshape(self.parameter_array[16:28], (self.num_joints_per_leg, self.num_legs))
         self.phase_offset = np.reshape(self.parameter_array[28:36], (self.num_joints_per_leg-1, self.num_legs))
@@ -105,7 +106,7 @@ class cpg_low_level_controller(low_level_controller):
             for j in range(self.num_legs):
                 self.relative_phases[i][j] = phases[j] - phases[i]
 
-        self.frequency = self.parameter_array[3] * np.ones((self.num_joints_per_leg, self.num_legs))
+        self.frequency = self.max_frequency*self.parameter_array[3] * np.ones((self.num_joints_per_leg, self.num_legs))
         self.amplitude = np.tile(np.reshape(self.parameter_array[4:7],(self.num_joints_per_leg, 1)), self.num_legs)
         self.amp_offset = np.tile(np.reshape(self.parameter_array[7:10],(self.num_joints_per_leg, 1)), self.num_legs)
         self.phase_offset = np.append([0], self.parameter_array[10:12])

@@ -8,6 +8,8 @@ class experiment_rollout_simple():
 
     def test_sample_gait(self):
         self.reward.total_reward = 0
+        state = self.env.reset()
+        
         for _ in range(self.episode_length):
             action = self.low_level_control.get_action()
             state = self.env.step(action)

@@ -6,13 +6,18 @@ tensorType: torch.FloatTensor #torch.cuda.FloatTensor
 a_dim: 12
 num_legs: 4 
 action_mid_point: [0.0, 1.5, -1.8] 
-action_scale: [0.8, 2.5, 0.8]
+action_scale: [1.6, 5.0, 1.6]
 
-num_trial: 30
-episode_length: 500
+num_trial: 1500
+episode_length: 2000
 optimizer: 'cma'
 
-init_parameter:
+init_parameter: [1.,         1.,         0.5,        
+                0.0, 
+                0.0, 0.0, 0.0, 
+                0.5, 0.36, 0.833, 
+                0.0, 0.0,]
+
 
 defaults:
   - low_level_control: CPG_simple

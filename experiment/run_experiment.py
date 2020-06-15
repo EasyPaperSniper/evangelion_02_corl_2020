@@ -25,7 +25,6 @@ def init_reward(cfg):
     return reward
 
 
-
 @hydra.main(config_path='../config/cma_cpg_simple.yaml', strict=False)
 def main(cfg):
     # define env
