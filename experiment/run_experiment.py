@@ -41,7 +41,8 @@ def main(cfg):
     exp_rollout = experiment_rollout_simple(env, low_level_control, reward, cfg.episode_length)
 
     # optimization 
-    result = run_optimization(cfg, exp_rollout, cfg.init_parameter)
+    best_solution, best_cost = run_optimization(cfg, exp_rollout, cfg.init_parameter)
+    print(best_solution, best_cost)
 
     
 
