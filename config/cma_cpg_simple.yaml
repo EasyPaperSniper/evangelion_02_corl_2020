@@ -8,7 +8,7 @@ num_legs: 4
 action_mid_point: [0.0, 1.5, -1.8] 
 action_scale: [1.6, 5.0, 1.6]
 
-num_trial: 1500
+num_trial: 1000
 episode_length: 2000
 optimizer: 'cma'
 
@@ -25,4 +25,4 @@ defaults:
 
 hydra:
   run:
-    dir: ./data/
+    dir: ./data/${low_level_control.low_level_name}_${reward.reward_name}_${seed}

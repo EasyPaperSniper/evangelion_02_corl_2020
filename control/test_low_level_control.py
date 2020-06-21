@@ -6,13 +6,13 @@ from unitree_toolkit.unitree_robot_env import unitree_robot_API
 def main():
     env = unitree_robot_API(render=True, robot ='a1',control_mode='position')
     init_state = env.reset()
-    EXP_LENGTH = 1000
+    EXP_LENGTH = 2000
     low_level_control = 'cpg'
 
     if low_level_control =='cpg':
-        parameter_array = [5.18569810e-01, 6.90115761e-01, 7.40876212e-01, 9.09098773e-02,
-                            1.58503179e-04, 8.44937460e-02, 6.67161796e-02, 7.92390507e-01,
-                        4.62110192e-01, 8.25270535e-01, 4.89251812e-01, 2.63722393e-01]
+        parameter_array = [9.25029394e-03, 5.50869296e-01, 9.95786376e-01, 2.46700981e-01,
+                            4.29118643e-05, 1.42139178e-02, 1.97832198e-01, 5.01789469e-01,
+                            4.32138066e-01, 9.98640527e-01, 4.79130381e-05, 1.51229524e-02,]
 
         low_level_control = cpg_low_level_controller(a_dim=12, 
                             num_legs=4, 

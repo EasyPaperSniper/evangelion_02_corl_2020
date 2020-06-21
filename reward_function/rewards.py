@@ -11,8 +11,9 @@ class velocity_tracking_reward():
         self.target = target
 
     def calc_instant_reward(self, state, action):
-        self.reward = -self.reward_factor[0]*np.linalg.norm(self.target[0:2] - state['base_velocity'][0:2]) - \
-                         self.reward_factor[1]*np.linalg.norm(self.target[2]- state['base_pos'][2])
+        self.reward = -self.reward_factor[0]* np.linalg.norm(self.target[0:2] - state['base_velocity'][0:2]) - \
+                        self.reward_factor[1]* np.linalg.norm(self.target[2]- state['base_pos'][2]) - \
+                        self.reward_factor[2]* np.dot(np.abs(state['j_eff']), np.abs(state['j_vel']) )
         self.total_reward += self.reward
         return self.reward
 

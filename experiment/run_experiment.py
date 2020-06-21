@@ -24,6 +24,9 @@ def init_reward(cfg):
     reward = hydra.utils.instantiate(cfg.reward)
     return reward
 
+def save_result(best_solution, best_cost):
+    np.save('./best_solution.npy', np.array(best_solution))
+    np.save('./best_cost.npy', np.array([best_cost]))
 
 @hydra.main(config_path='../config/cma_cpg_simple.yaml', strict=False)
 def main(cfg):
@@ -42,6 +45,10 @@ def main(cfg):
     # optimization 
     best_solution, best_cost = run_optimization(cfg, exp_rollout, cfg.init_parameter)
     print(best_solution, best_cost)
+
+    # save_data
+    save_result(best_solution, best_cost)
+
 
     
 
