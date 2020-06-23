@@ -10,14 +10,13 @@ def main():
     low_level_control = 'cpg'
 
     if low_level_control =='cpg':
-        parameter_array = np.array([0.81052535, 0.77606666, 0.6355018 , 0.00095107, 0.33033718,
-       0.00519624, 0.03436627, 0.92213039, 0.36761444, 0.72378643,
-       0.39245134, 0.19365534])
+        parameter_array = np.array([0.49305037, 0.55403072, 0.42793498, 0.00253978, 0.98596996, 0.00448048,
+                            0.05343879, 0.12660893, 0.41683952, 0.96759396, 0.14525752, 0.98158289])
 
         low_level_control = cpg_low_level_controller(a_dim=12, 
                             num_legs=4, 
                             parameter_dim=12, 
-                            max_frequency=2,
+                            max_frequency=5,
                             action_mid_point=[0.0, 1.5, -1.8] , 
                             action_scale=[1.6, 5.0, 1.8])
 
@@ -30,7 +29,6 @@ def main():
 
     for _ in range(EXP_LENGTH):
         action = low_level_control.get_action()
-        # print(action)
         state = env.step(action)
 
 
