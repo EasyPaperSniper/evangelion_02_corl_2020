@@ -8,7 +8,7 @@ from unitree_toolkit.unitree_robot_env import unitree_robot_API
 
 from test_sample_gaits import experiment_rollout_simple
 from optimization.optimization_methods import run_optimization
-from reward_function.rewards import velocity_tracking_reward
+from reward_function.rewards import expert_reward_optimize
 
 
 
@@ -18,6 +18,7 @@ def init_env(cfg):
 
 def init_low_level_controller(cfg):
     low_level_control = hydra.utils.instantiate(cfg.low_level_control)
+    low_level_control.update_policy_parmeters(cfg.init_parameter)
     return low_level_control
 
 def init_reward(cfg):

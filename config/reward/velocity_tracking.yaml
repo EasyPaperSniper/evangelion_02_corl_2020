@@ -1,6 +1,6 @@
 reward:
-  reward_name: velocity_tracking
-  class: reward_function.rewards.velocity_tracking_reward
+  reward_name: expert_reward
+  class: reward_function.rewards.expert_reward_optimize
   params:
     target: [0.2, 0.0, 0.3]
     velocity_factor: 0.5

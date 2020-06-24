@@ -4,9 +4,10 @@ MAX_JOINT_EFFORT = np.array([20., 55., 55.])
 MAX_JOINT_VEL = np.array([52.4, 28.6, 28.6])
 
 def normalize_joint_state(joint_state, norm_factor):
-    state = joint_state.reshape(4,3)
+    state = np.reshape(joint_state, (4,3))
     state_norm = state / norm_factor
-    return state_norm.reshape(12)
+    print(state_norm)
+    return np.reshape(state_norm, (12))
 
 class expert_reward_optimize():
     def __init__(self, target, velocity_factor, height_factor, power_factor, effort_factor):

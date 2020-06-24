@@ -10,7 +10,11 @@ def main():
     low_level_control = 'cpg'
 
     if low_level_control =='cpg':
-        parameter_array = np.clip(np.random.randn(12), 0 ,1)
+        parameter_array = [1.,         1.,         0.5,        
+                0.0, 
+                0.0, 0.0, 0.0, 
+                0.5, 0.36, 0.833, 
+                0.0, 0.0,]
 
         low_level_control = cpg_low_level_controller(a_dim=12, 
                             num_legs=4, 
