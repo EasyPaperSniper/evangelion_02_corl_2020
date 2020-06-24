@@ -32,7 +32,7 @@ class low_level_controller:
         
 
 class cpg_low_level_controller(low_level_controller):
-    def __init__(self, a_dim, num_legs, parameter_dim=48, max_frequency = 5, action_mid_point=None, action_scale=None):
+    def __init__(self, a_dim, num_legs, parameter_dim=48, max_frequency = 2, action_mid_point=None, action_scale=None):
         super().__init__(a_dim=a_dim, num_legs=num_legs, action_mid_point=action_mid_point, action_scale=action_scale)
 
         self.parameter_dim = parameter_dim
